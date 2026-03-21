@@ -60,6 +60,32 @@ function StatCard({ icon: Icon, label, value, color }) {
   )
 }
 
+function DeleteModal({ isOpen, onClose, onConfirm, clientName }) {
+  if (!isOpen) return null
+  
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl p-6">
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Trash2 className="w-8 h-8 text-red-600" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 text-center mb-2">Delete Client</h3>
+        <p className="text-gray-500 text-center mb-6">
+          Are you sure you want to delete <strong>{clientName}</strong>? This action cannot be undone.
+        </p>
+        <div className="flex gap-3">
+          <Button variant="secondary" onClick={onClose} className="flex-1">
+            Cancel
+          </Button>
+          <Button onClick={onConfirm} className="flex-1 bg-red-600 hover:bg-red-700">
+            Delete
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function ClientModal({ isOpen, onClose, onSuccess, userId }) {
   const [formData, setFormData] = useState({ name: '', website: '', logo_url: '' })
   const [loading, setLoading] = useState(false)
@@ -171,6 +197,7 @@ export default function Clients() {
   const [clients, setClients] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState({ open: false, id: null, name: '' })
   const [loading, setLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { user } = useAuth()
@@ -197,16 +224,21 @@ export default function Clients() {
   }
 
   const handleDelete = async (id) => {
-    if (confirm('Are you sure you want to delete this client? This action cannot be undone.')) {
-      try {
-        const { error } = await supabase.from('clients').delete().eq('id', id)
-        if (error) throw error
-        toast.success('Client deleted successfully')
-        fetchClients()
-      } catch (err) {
-        console.error('Failed to delete client:', err)
-        toast.error('Failed to delete client')
-      }
+    const client = clients.find(c => c.id === id)
+    setDeleteModal({ open: true, id, name: client?.name || 'this client' })
+  }
+
+  const confirmDelete = async () => {
+    try {
+      const { error } = await supabase.from('clients').delete().eq('id', deleteModal.id)
+      if (error) throw error
+      toast.success('Client deleted successfully')
+      setDeleteModal({ open: false, id: null, name: '' })
+      fetchClients()
+    } catch (err) {
+      console.error('Failed to delete client:', err)
+      toast.error('Failed to delete client')
+      setDeleteModal({ open: false, id: null, name: '' })
     }
   }
 
@@ -272,22 +304,6 @@ export default function Clients() {
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
           </div>
-        ) : filteredClients.length === 0 ? (
-          <Card>
-            <div className="text-center py-8 sm:py-12">
-              <Users className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1">No clients found</h3>
-              <p className="text-gray-500 mb-4 text-sm">
-                {searchQuery ? 'Try a different search term' : 'Get started by adding your first client'}
-              </p>
-              {!searchQuery && (
-                <Button onClick={() => setShowModal(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Client
-                </Button>
-              )}
-            </div>
-          </Card>
         ) : (
           <>
           {!searchQuery && (
@@ -330,11 +346,12 @@ export default function Clients() {
             </div>
           )}
           
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Your Clients</h3>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {filteredClients.length > 0 && (
+            <>
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Your Clients</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredClients.map((client) => (
               <Card key={client.id} className="hover:shadow-md transition-shadow group">
                 <div className="flex items-start justify-between mb-4">
@@ -383,7 +400,9 @@ export default function Clients() {
                 </div>
               </Card>
             ))}
-          </div>
+            </div>
+            </>
+          )}
           </>
         )}
       </main>
@@ -393,6 +412,13 @@ export default function Clients() {
         onClose={() => setShowModal(false)} 
         onSuccess={fetchClients}
         userId={user.id}
+      />
+      
+      <DeleteModal
+        isOpen={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, id: null, name: '' })}
+        onConfirm={confirmDelete}
+        clientName={deleteModal.name}
       />
     </div>
   )
