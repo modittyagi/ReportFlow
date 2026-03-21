@@ -3,7 +3,29 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
-import { FileText, Search, Download, Trash2, Eye, TrendingUp, Clock, Menu, X, Calendar } from 'lucide-react'
+import Button from '../../components/ui/Button'
+import { FileText, Search, Download, Trash2, Eye, TrendingUp, Clock, Menu, X, Calendar, AlertTriangle } from 'lucide-react'
+
+function DeleteModal({ isOpen, onClose, onConfirm, clientName }) {
+  if (!isOpen) return null
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-xl p-6">
+        <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
+          <AlertTriangle className="w-6 h-6 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">Delete Report?</h3>
+        <p className="text-gray-500 text-center mb-6">
+          Are you sure you want to delete the report for <span className="font-medium text-gray-700">{clientName}</span>? This action cannot be undone.
+        </p>
+        <div className="flex gap-3">
+          <Button variant="secondary" onClick={onClose} className="flex-1">Cancel</Button>
+          <Button onClick={onConfirm} className="flex-1 bg-red-600 hover:bg-red-700">Delete</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function MobileNav({ isOpen, onClose }) {
   const links = [
@@ -151,6 +173,7 @@ export default function Reports() {
   const [searchQuery, setSearchQuery] = useState('')
   const [timeFilter, setTimeFilter] = useState('all')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [deleteModal, setDeleteModal] = useState({ open: false, id: null, clientName: '' })
   const { user } = useAuth()
 
   useEffect(() => {
@@ -167,10 +190,14 @@ export default function Reports() {
   }
 
   const handleDelete = async (id) => {
-    if (confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
-      await supabase.from('reports').delete().eq('id', id)
-      fetchReports()
-    }
+    const report = reports.find(r => r.id === id)
+    setDeleteModal({ open: true, id, clientName: report?.clients?.name || 'this report' })
+  }
+
+  const confirmDelete = async () => {
+    await supabase.from('reports').delete().eq('id', deleteModal.id)
+    setDeleteModal({ open: false, id: null, clientName: '' })
+    fetchReports()
   }
 
   const filteredReports = reports.filter(report => {
@@ -290,6 +317,13 @@ export default function Reports() {
           </div>
         )}
       </main>
+      
+      <DeleteModal 
+        isOpen={deleteModal.open} 
+        onClose={() => setDeleteModal({ open: false, id: null, clientName: '' })}
+        onConfirm={confirmDelete}
+        clientName={deleteModal.clientName}
+      />
     </div>
   )
 }
