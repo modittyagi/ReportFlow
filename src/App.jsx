@@ -12,6 +12,7 @@ import ClientDetail from './pages/clients/ClientDetail'
 import MetaCallback from './pages/clients/MetaCallback'
 import GA4Callback from './pages/clients/GA4Callback'
 import Reports from './pages/reports/Reports'
+import ReportDetail from './pages/reports/ReportDetail'
 import Settings from './pages/settings/Settings'
 
 function InitialLoader({ onComplete }) {
@@ -135,6 +136,7 @@ export default function App() {
               <Route path="/auth/callback/meta" element={<MetaCallback />} />
               <Route path="/auth/callback/ga4" element={<GA4Callback />} />
               <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+              <Route path="/reports/:id" element={<ProtectedRoute><ReportDetail /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Routes>
           </motion.div>

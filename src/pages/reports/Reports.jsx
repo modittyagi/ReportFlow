@@ -89,61 +89,59 @@ function ReportCard({ report, onDelete }) {
   }
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 flex-1 min-w-0">
-          {report.clients?.logo_url ? (
-            <img src={report.clients.logo_url} alt={report.clients.name} className="w-12 h-12 rounded-xl object-contain bg-gray-50 p-1.5" />
-          ) : (
-            <div className="w-12 h-12 bg-gradient-to-br from-brand-100 to-brand-200 rounded-xl flex items-center justify-center">
-              <FileText className="w-6 h-6 text-brand-600" />
-            </div>
-          )}
-          
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900 truncate">{report.clients?.name || 'Unknown Client'}</h3>
-              {report.pdf_url && (
-                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
-                  PDF Ready
+    <Link to={`/reports/${report.id}`} className="block">
+      <Card className="hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            {report.clients?.logo_url ? (
+              <img src={report.clients.logo_url} alt={report.clients.name} className="w-12 h-12 rounded-xl object-contain bg-gray-50 p-1.5" />
+            ) : (
+              <div className="w-12 h-12 bg-gradient-to-br from-brand-100 to-brand-200 rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-brand-600" />
+              </div>
+            )}
+            
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-gray-900 truncate">{report.clients?.name || 'Unknown Client'}</h3>
+                {report.pdf_url && (
+                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
+                    PDF Ready
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3 mt-1">
+                <span className="text-sm text-gray-500 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {formattedDate}
                 </span>
-              )}
-            </div>
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-sm text-gray-500 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
-                {formattedDate}
-              </span>
-              <span className="text-sm text-gray-400 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                {timeAgo(report.created_at)}
-              </span>
+                <span className="text-sm text-gray-400 flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  {timeAgo(report.created_at)}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2 ml-4">
-          {report.pdf_url && (
-            <a
-              href={report.pdf_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors text-sm font-medium"
-            >
+          
+          <div className="flex items-center gap-2 ml-4">
+            <span className="flex items-center gap-1.5 px-3 py-2 bg-brand-50 text-brand-600 rounded-lg text-sm font-medium">
               <Eye className="w-4 h-4" />
               View
-            </a>
-          )}
-          <button
-            onClick={() => onDelete(report.id)}
-            className="p-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            title="Delete report"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+            </span>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                onDelete(report.id)
+              }}
+              className="p-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              title="Delete report"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   )
 }
 
