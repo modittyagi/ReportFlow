@@ -132,8 +132,8 @@ export default function App() {
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
               <Route path="/clients/:id" element={<ProtectedRoute><ClientDetail /></ProtectedRoute>} />
-              <Route path="/clients/:id/callback/meta" element={<MetaCallback />} />
-              <Route path="/clients/:id/callback/ga4" element={<GA4Callback />} />
+              <Route path="/auth/callback/meta" element={<MetaCallback />} />
+              <Route path="/auth/callback/ga4" element={<GA4Callback />} />
               <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             </Routes>

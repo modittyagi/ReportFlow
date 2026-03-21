@@ -1,24 +1,20 @@
 import { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { useAuth } from '../../context/AuthContext'
 
 export default function MetaCallback() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const { user } = useAuth()
-  
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get('code')
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+    const clientId = params.get('state')
     
-    if (code) {
+    if (code && clientId) {
       const exchangeToken = async () => {
         try {
           const response = await fetch(
             `https://graph.facebook.com/v18.0/oauth/access_token?` +
             `client_id=${import.meta.env.VITE_META_APP_ID}&` +
-            `client_secret=${import.meta.env.META_APP_SECRET}&` +
-            `redirect_uri=${window.location.origin}/clients/${id}/callback/meta&` +
+            `client_secret=${import.meta.env.VITE_META_APP_SECRET}&` +
+            `redirect_uri=${window.location.origin}/auth/callback/meta&` +
             `code=${code}`
           )
           
@@ -38,19 +34,26 @@ export default function MetaCallback() {
                   meta_access_token: data.access_token,
                   meta_ad_account_id: accountsData.data[0].id
                 })
-                .eq('id', id)
+                .eq('id', clientId)
             }
           }
         } catch (err) {
           console.error('Meta OAuth error:', err)
         }
         
-        navigate(`/clients/${id}`)
+        window.location.href = `/clients/${clientId}`
       }
       
       exchangeToken()
     }
-  }, [id])
+  }, [])
   
-  return <div className="p-8 text-center">Connecting to Meta Ads...</div>
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-600">Connecting to Meta Ads...</p>
+      </div>
+    </div>
+  )
 }

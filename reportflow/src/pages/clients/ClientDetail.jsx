@@ -28,16 +28,16 @@ export default function ClientDetail() {
 
   const connectMeta = async () => {
     const appId = import.meta.env.VITE_META_APP_ID
-    const redirectUri = `${window.location.origin}/clients/${id}/callback/meta`
+    const redirectUri = `${window.location.origin}/auth/callback/meta`
     const scope = 'ads_read,ads_management'
-    window.location.href = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${appId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`
+    window.location.href = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${appId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${id}`
   }
 
   const connectGA4 = async () => {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
-    const redirectUri = `${window.location.origin}/clients/${id}/callback/ga4`
+    const redirectUri = `${window.location.origin}/auth/callback/ga4`
     const scope = 'https://www.googleapis.com/auth/analytics.readonly'
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&access_type=offline`
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&access_type=offline&state=${id}`
   }
 
   const handleGenerateReport = async () => {

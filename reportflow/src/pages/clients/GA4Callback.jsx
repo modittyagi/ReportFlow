@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
 export default function GA4Callback() {
-  const { id } = useParams()
   const navigate = useNavigate()
   
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get('code')
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+    const clientId = params.get('state')
     
-    if (code) {
+    if (code && clientId) {
       const exchangeToken = async () => {
         try {
           const response = await fetch('https://oauth2.googleapis.com/token', {
@@ -17,8 +18,8 @@ export default function GA4Callback() {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
               client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-              client_secret: import.meta.env.GOOGLE_CLIENT_SECRET,
-              redirect_uri: `${window.location.origin}/clients/${id}/callback/ga4`,
+              client_secret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
+              redirect_uri: `${window.location.origin}/auth/callback/ga4`,
               grant_type: 'authorization_code',
               code
             })
@@ -44,19 +45,26 @@ export default function GA4Callback() {
                   ga4_access_token: data.access_token,
                   ga4_property_id: firstProperty.property.split('/')[1]
                 })
-                .eq('id', id)
+                .eq('id', clientId)
             }
           }
         } catch (err) {
           console.error('GA4 OAuth error:', err)
         }
         
-        navigate(`/clients/${id}`)
+        window.location.href = `/clients/${clientId}`
       }
       
       exchangeToken()
     }
-  }, [id])
+  }, [])
   
-  return <div className="p-8 text-center">Connecting to Google Analytics...</div>
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-600">Connecting to Google Analytics...</p>
+      </div>
+    </div>
+  )
 }

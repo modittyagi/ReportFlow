@@ -3,7 +3,42 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
-import { FileText, Search, Calendar, Download, Trash2, Eye, TrendingUp, Clock } from 'lucide-react'
+import { FileText, Search, Download, Trash2, Eye, TrendingUp, Clock, Menu, X } from 'lucide-react'
+
+function MobileNav({ isOpen, onClose }) {
+  const links = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/clients', label: 'Clients' },
+    { to: '/reports', label: 'Reports' },
+    { to: '/settings', label: 'Settings' },
+  ]
+  
+  return (
+    <div className={`fixed inset-0 z-50 lg:hidden ${isOpen ? 'visible' : 'invisible'}`}>
+      <div className={`absolute inset-0 bg-black/50 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0'}`} onClick={onClose} />
+      <div className={`absolute right-0 top-0 h-full w-64 bg-white shadow-xl transform transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="font-bold text-brand-600">Menu</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <nav className="p-4 space-y-2">
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={onClose}
+              className="block px-4 py-3 rounded-lg hover:bg-gray-100 font-medium text-gray-700"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </div>
+  )
+}
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
@@ -117,6 +152,7 @@ export default function Reports() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [timeFilter, setTimeFilter] = useState('all')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { user } = useAuth()
 
   useEffect(() => {
@@ -170,48 +206,55 @@ export default function Reports() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 px-6 py-4">
+      <nav className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-brand-600">ReportFlow</h1>
-          <div className="flex gap-4">
-            <Link to="/dashboard" className="text-gray-600 hover:text-brand-600">Dashboard</Link>
-            <Link to="/clients" className="text-gray-600 hover:text-brand-600">Clients</Link>
-            <Link to="/reports" className="text-brand-600 font-medium">Reports</Link>
-            <Link to="/settings" className="text-gray-600 hover:text-brand-600">Settings</Link>
+          <h1 className="text-lg sm:text-xl font-bold text-brand-600">ReportFlow</h1>
+          <div className="hidden lg:flex gap-4">
+            <Link to="/dashboard" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Dashboard</Link>
+            <Link to="/clients" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Clients</Link>
+            <Link to="/reports" className="text-brand-600 font-medium px-3 py-2 rounded-lg hover:bg-gray-100">Reports</Link>
+            <Link to="/settings" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Settings</Link>
           </div>
+          <button 
+            onClick={() => setMobileMenuOpen(true)} 
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+            aria-label="Open menu"
+          >
+            <Menu className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
       </nav>
       
-      <main className="max-w-7xl mx-auto py-8 px-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      
+      <main className="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Reports</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Reports</h2>
             <p className="text-gray-500 text-sm mt-1">{reports.length} total reports</p>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by client..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg w-56 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-              />
-            </div>
+          <div className="relative w-full sm:w-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg w-full sm:w-56 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+            />
           </div>
         </div>
         
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-sm text-gray-500 mr-1">Filter:</span>
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <span className="text-sm text-gray-500">Filter:</span>
           <FilterButton active={timeFilter === 'all'} onClick={() => setTimeFilter('all')}>All</FilterButton>
           <FilterButton active={timeFilter === 'week'} onClick={() => setTimeFilter('week')}>This Week</FilterButton>
           <FilterButton active={timeFilter === 'month'} onClick={() => setTimeFilter('month')}>This Month</FilterButton>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <StatCard icon={FileText} label="Total Reports" value={reports.length} color="bg-blue-500" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <StatCard icon={FileText} label="Total" value={reports.length} color="bg-blue-500" />
           <StatCard icon={Clock} label="This Month" value={thisMonthCount} color="bg-purple-500" />
           <StatCard icon={Download} label="With PDF" value={pdfCount} color="bg-emerald-500" />
           <StatCard icon={TrendingUp} label="This Week" value={reports.filter(r => new Date(r.created_at) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length} color="bg-orange-500" />
@@ -223,10 +266,10 @@ export default function Reports() {
           </div>
         ) : filteredReports.length === 0 ? (
           <Card>
-            <div className="text-center py-12">
-              <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">No reports found</h3>
-              <p className="text-gray-500 mb-4">
+            <div className="text-center py-8 sm:py-12">
+              <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1">No reports found</h3>
+              <p className="text-gray-500 mb-4 text-sm">
                 {searchQuery || timeFilter !== 'all' 
                   ? 'Try adjusting your search or filters'
                   : 'Go to a client page to generate your first report'}

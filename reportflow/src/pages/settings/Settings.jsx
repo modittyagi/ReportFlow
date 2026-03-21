@@ -5,7 +5,42 @@ import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
 import Button from '../../components/ui/Button'
-import { Building2, CalendarClock, User, Upload, Check, LogOut } from 'lucide-react'
+import { Building2, CalendarClock, User, Upload, Check, LogOut, Menu, X } from 'lucide-react'
+
+function MobileNav({ isOpen, onClose }) {
+  const links = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/clients', label: 'Clients' },
+    { to: '/reports', label: 'Reports' },
+    { to: '/settings', label: 'Settings' },
+  ]
+  
+  return (
+    <div className={`fixed inset-0 z-50 lg:hidden ${isOpen ? 'visible' : 'invisible'}`}>
+      <div className={`absolute inset-0 bg-black/50 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0'}`} onClick={onClose} />
+      <div className={`absolute right-0 top-0 h-full w-64 bg-white shadow-xl transform transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="font-bold text-brand-600">Menu</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <nav className="p-4 space-y-2">
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={onClose}
+              className="block px-4 py-3 rounded-lg hover:bg-gray-100 font-medium text-gray-700"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </div>
+  )
+}
 
 function TabButton({ active, onClick, icon: Icon, label }) {
   return (
@@ -64,6 +99,7 @@ export default function Settings() {
   const [clients, setClients] = useState([])
   const [selectedClient, setSelectedClient] = useState('')
   const [success, setSuccess] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { user, signOut } = useAuth()
 
   useEffect(() => {
@@ -132,22 +168,31 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 px-6 py-4">
+      <nav className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-brand-600">ReportFlow</h1>
-          <div className="flex gap-4">
-            <Link to="/dashboard" className="text-gray-600 hover:text-brand-600">Dashboard</Link>
-            <Link to="/clients" className="text-gray-600 hover:text-brand-600">Clients</Link>
-            <Link to="/reports" className="text-gray-600 hover:text-brand-600">Reports</Link>
-            <Link to="/settings" className="text-brand-600 font-medium">Settings</Link>
+          <h1 className="text-lg sm:text-xl font-bold text-brand-600">ReportFlow</h1>
+          <div className="hidden lg:flex gap-4">
+            <Link to="/dashboard" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Dashboard</Link>
+            <Link to="/clients" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Clients</Link>
+            <Link to="/reports" className="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-lg hover:bg-gray-100">Reports</Link>
+            <Link to="/settings" className="text-brand-600 font-medium px-3 py-2 rounded-lg hover:bg-gray-100">Settings</Link>
           </div>
+          <button 
+            onClick={() => setMobileMenuOpen(true)} 
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+            aria-label="Open menu"
+          >
+            <Menu className="w-6 h-6 text-gray-600" />
+          </button>
         </div>
       </nav>
       
-      <main className="max-w-4xl mx-auto py-8 px-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Settings</h2>
+      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      
+      <main className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Settings</h2>
         
-        <div className="flex gap-2 mb-6 bg-white p-1.5 rounded-xl border border-gray-200 w-fit">
+        <div className="flex gap-2 mb-6 bg-white p-1.5 rounded-xl border border-gray-200 overflow-x-auto">
           <TabButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={Building2} label="Profile" />
           <TabButton active={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} icon={CalendarClock} label="Schedule" />
           <TabButton active={activeTab === 'account'} onClick={() => setActiveTab('account')} icon={User} label="Account" />
