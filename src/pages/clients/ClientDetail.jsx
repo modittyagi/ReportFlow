@@ -3,7 +3,33 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
+import Button from '../../components/ui/Button'
 import { generateReport } from '../../utils/reportGenerator'
+import { CheckCircle, FileText, Loader2 } from 'lucide-react'
+
+function SuccessModal({ isOpen, onClose, reportId, onViewReport, onGoToReports }) {
+  if (!isOpen) return null
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-xl p-6 text-center">
+        <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-green-600" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">Report Generated!</h3>
+        <p className="text-gray-500 mb-6">Your report has been created successfully with all the latest data.</p>
+        <div className="space-y-3">
+          <Button onClick={onViewReport} className="w-full">
+            <FileText className="w-4 h-4 mr-2" />
+            View Report Details
+          </Button>
+          <Button variant="secondary" onClick={onGoToReports} className="w-full">
+            View All Reports
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function ClientDetail() {
   const { id } = useParams()
@@ -13,6 +39,8 @@ export default function ClientDetail() {
   const [metaConnected, setMetaConnected] = useState(false)
   const [ga4Connected, setGa4Connected] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [generating, setGenerating] = useState(false)
+  const [successModal, setSuccessModal] = useState({ open: false, reportId: null })
 
   useEffect(() => {
     fetchClient()
@@ -46,16 +74,15 @@ export default function ClientDetail() {
       return
     }
     
-    setLoading(true)
+    setGenerating(true)
     try {
-      await generateReport(id, user.id)
-      alert('Report generated successfully!')
-      navigate('/reports')
+      const report = await generateReport(id, user.id)
+      setSuccessModal({ open: true, reportId: report.id })
     } catch (err) {
       console.error(err)
       alert('Error generating report')
+      setGenerating(false)
     }
-    setLoading(false)
   }
 
   if (loading) return <div className="p-8">Loading...</div>
@@ -121,13 +148,22 @@ export default function ClientDetail() {
           </p>
           <button
             onClick={handleGenerateReport}
-            disabled={loading || (!metaConnected && !ga4Connected)}
-            className="w-full py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            disabled={generating || (!metaConnected && !ga4Connected)}
+            className="w-full py-3 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
           >
-            {loading ? 'Generating...' : 'Generate PDF Report'}
+            {generating && <Loader2 className="w-4 h-4 animate-spin" />}
+            {generating ? 'Generating...' : 'Generate PDF Report'}
           </button>
         </Card>
       </main>
+
+      <SuccessModal 
+        isOpen={successModal.open}
+        onClose={() => setSuccessModal({ open: false, reportId: null })}
+        reportId={successModal.reportId}
+        onViewReport={() => navigate(`/reports/${successModal.reportId}`)}
+        onGoToReports={() => navigate('/reports')}
+      />
     </div>
   )
 }
