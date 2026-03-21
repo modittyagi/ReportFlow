@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="#3b82f6" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="250" fill="#8b5cf6" opacity="0.1"/>
+  <circle cx="600" cy="315" r="300" fill="#6366f1" opacity="0.05"/>
+  
+  <!-- Grid pattern -->
+  <g stroke="#334155" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+  
+  <!-- Logo Icon -->
+  <g transform="translate(100, 180)" filter="url(#glow)">
+    <rect width="80" height="80" rx="16" fill="url(#accentGrad)"/>
+    <g stroke="white" stroke-width="6" stroke-linecap="round" fill="none">
+      <line x1="24" y1="56" x2="24" y2="24"/>
+      <line x1="40" y1="56" x2="40" y2="32"/>
+      <line x1="56" y1="56" x2="56" y2="28"/>
+    </g>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="320" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="white">ReportFlow</text>
+  <text x="100" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#94a3b8">Automated Marketing Reports</text>
+  
+  <!-- Features -->
+  <g transform="translate(100, 430)">
+    <!-- Feature 1 -->
+    <g>
+      <rect width="300" height="60" rx="12" fill="#1e293b"/>
+      <circle cx="35" cy="30" r="16" fill="#3b82f6"/>
+      <path d="M28 30 L33 35 L43 25" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="65" y="36" font-family="system-ui, sans-serif" font-size="18" fill="white">Meta Ads Integration</text>
+    </g>
+    
+    <!-- Feature 2 -->
+    <g transform="translate(340, 0)">
+      <rect width="300" height="60" rx="12" fill="#1e293b"/>
+      <circle cx="35" cy="30" r="16" fill="#10b981"/>
+      <path d="M28 30 L33 35 L43 25" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="65" y="36" font-family="system-ui, sans-serif" font-size="18" fill="white">Google Analytics</text>
+    </g>
+    
+    <!-- Feature 3 -->
+    <g transform="translate(680, 0)">
+      <rect width="300" height="60" rx="12" fill="#1e293b"/>
+      <circle cx="35" cy="30" r="16" fill="#f59e0b"/>
+      <path d="M28 30 L33 35 L43 25" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="65" y="36" font-family="system-ui, sans-serif" font-size="18" fill="white">PDF Generation</text>
+    </g>
+  </g>
+  
+  <!-- CTA -->
+  <text x="100" y="560" font-family="system-ui, sans-serif" font-size="24" fill="#64748b">Save 5-10 hours weekly with automated reports</text>
+  
+  <!-- Stats badge -->
+  <g transform="translate(950, 500)">
+    <rect width="200" height="80" rx="40" fill="url(#accentGrad)"/>
+    <text x="100" y="38" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">4.8★</text>
+    <text x="100" y="60" font-family="system-ui, sans-serif" font-size="14" fill="white" opacity="0.8" text-anchor="middle">127 Reviews</text>
+  </g>
+</svg>

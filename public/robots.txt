@@ -1,0 +1,21 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://report-flow-zeta.vercel.app/sitemap.xml
+Sitemap: https://report-flow-zeta.vercel.app/sitemap.html
+
+# Crawl-delay (be nice to servers)
+Crawl-delay: 1
+
+# Disallow sensitive/auth paths
+Disallow: /api/
+Disallow: /auth/callback/
+Disallow: /reset-password/
+
+# Allow search engines to use images
+Allow: /og-image.svg
+
+# Host directive
+Host: https://report-flow-zeta.vercel.app
