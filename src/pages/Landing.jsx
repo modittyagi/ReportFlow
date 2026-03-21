@@ -123,57 +123,6 @@ function DashboardMockup({ mouseX, mouseY }) {
   )
 }
 
-function TestimonialsCarousel() {
-  const [current, setCurrent] = useState(0)
-  const testimonials = [
-    { quote: "ReportFlow has completely transformed how we deliver client reports. What used to take hours now takes minutes.", author: "Sarah Mitchell", role: "Marketing Director", company: "Elevate Digital", avatar: "SM" },
-    { quote: "The automated scheduling feature is a game-changer. We set it up once and now clients get reports automatically.", author: "Marcus Chen", role: "Founder", company: "GrowthLab Agency", avatar: "MC" },
-    { quote: "Finally, a reporting tool that looks as good as the work we do. The PDF exports are stunning.", author: "Jessica Torres", role: "CEO", company: "Brightwave Media", avatar: "JT" }
-  ]
-
-  const next = () => setCurrent((prev) => (prev + 1) % testimonials.length)
-  const prev = () => setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-
-  useEffect(() => {
-    const interval = setInterval(next, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  return (
-    <section className="py-16 md:py-20 bg-gray-50 dark:bg-gray-800 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <motion.div className="text-center mb-8 md:mb-16" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 md:mb-4">Loved by Agencies</h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4">See what marketing agencies are saying about ReportFlow.</p>
-        </motion.div>
-
-        <div className="relative max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div key={current} initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} transition={{ duration: 0.3 }} className="bg-white dark:bg-gray-700 rounded-2xl p-6 sm:p-8 md:p-10 shadow-lg mx-2">
-              <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-xl sm:text-2xl md:text-3xl font-bold flex-shrink-0">
-                  {testimonials[current].avatar}
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-200 leading-relaxed mb-4">"{testimonials[current].quote}"</p>
-                  <p className="font-semibold text-gray-900 dark:text-white">{testimonials[current].author}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[current].role} at {testimonials[current].company}</p>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="flex justify-center gap-2 mt-6">
-            {testimonials.map((_, i) => (
-              <button key={i} onClick={() => setCurrent(i)} className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all touch-target ${i === current ? 'bg-blue-600 w-6 sm:w-8' : 'bg-gray-300 dark:bg-gray-600'}`} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 function IntegrationLogos() {
   const logos = [
     { name: 'Meta', icon: 'M', color: 'from-blue-600 to-blue-700' },
@@ -472,7 +421,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <TestimonialsCarousel />
       <PricingPreview />
 
       <section className="py-16 md:py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 dark:from-gray-900 dark:via-indigo-900 dark:to-gray-900 relative overflow-hidden">
