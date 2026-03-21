@@ -111,10 +111,13 @@ export async function generatePDF({ client, metaData, ga4Data, reportId }) {
   const blob = new Blob([html], { type: 'text/html' })
   const url = URL.createObjectURL(blob)
   
-  const win = window.open(url)
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  const printWindow = window.open('', '_blank')
+  printWindow.document.write(html)
+  printWindow.document.close()
   
-  const canvas = await html2canvas(win.document.body, { scale: 2, useCORS: true })
+  await new Promise(resolve => setTimeout(resolve, 1500))
+  
+  const canvas = await html2canvas(printWindow.document.body, { scale: 2, useCORS: true })
   const imgData = canvas.toDataURL('image/png')
   
   const pdf = new jsPDF('p', 'mm', 'a4')
@@ -122,7 +125,7 @@ export async function generatePDF({ client, metaData, ga4Data, reportId }) {
   const pdfHeight = (canvas.height * pdfWidth) / canvas.width
   
   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-  win.close()
+  printWindow.close()
   URL.revokeObjectURL(url)
   
   return pdf.output('blob')
