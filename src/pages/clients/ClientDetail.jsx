@@ -5,13 +5,19 @@ import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import { generateReport } from '../../utils/reportGenerator'
-import { CheckCircle, FileText, Loader2 } from 'lucide-react'
+import { CheckCircle, FileText, Loader2, X } from 'lucide-react'
 
 function SuccessModal({ isOpen, onClose, reportId, onViewReport, onGoToReports }) {
   if (!isOpen) return null
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md shadow-xl p-6 text-center">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-xl p-6 text-center relative">
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
         <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
