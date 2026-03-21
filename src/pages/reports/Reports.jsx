@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import Card from '../../components/ui/Card'
-import { FileText, Search, Download, Trash2, Eye, TrendingUp, Clock, Menu, X } from 'lucide-react'
+import { FileText, Search, Download, Trash2, Eye, TrendingUp, Clock, Menu, X, Calendar } from 'lucide-react'
 
 function MobileNav({ isOpen, onClose }) {
   const links = [
