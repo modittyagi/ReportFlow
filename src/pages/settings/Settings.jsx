@@ -198,7 +198,7 @@ export default function Settings() {
       <main className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Settings</h2>
         
-        <div className="flex gap-2 mb-6 bg-white p-1.5 rounded-xl border border-gray-200 overflow-x-auto">
+        <div className="flex justify-center gap-2 mb-8 bg-white p-2 rounded-xl border border-gray-200">
           <TabButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={Building2} label="Profile" />
           <button
             onClick={() => toast.info('Schedule Reports coming soon!')}
