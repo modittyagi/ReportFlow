@@ -39,14 +39,14 @@ function ActivityChart({ data }) {
   return (
     <Card>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Activity</h3>
-        <span className="text-sm text-gray-500">Last 6 months</span>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900">Activity</h3>
+        <span className="text-xs sm:text-sm text-gray-500">Last 6 months</span>
       </div>
-      <div className="h-40 sm:h-48">
+      <div className="h-32 sm:h-48 w-full overflow-hidden">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barCategoryGap="20%">
-            <XAxis dataKey="month" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+          <BarChart data={data} barCategoryGap="15%" margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+            <XAxis dataKey="month" tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10 }} axisLine={false} tickLine={false} width={30} />
             <Tooltip 
               contentStyle={{ borderRadius: 8, border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
               cursor={{ fill: '#f3f4f6' }}
