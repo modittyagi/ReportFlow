@@ -279,7 +279,7 @@ export default function Settings() {
                       <select
                         value={selectedClient}
                         onChange={(e) => setSelectedClient(e.target.value)}
-                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white"
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white text-black"
                       >
                         <option value="">Select a client</option>
                         {clients.map((c) => (
@@ -293,7 +293,7 @@ export default function Settings() {
                       <select
                         value={schedule.day}
                         onChange={(e) => setSchedule({ ...schedule, day: e.target.value })}
-                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white"
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-white text-black"
                       >
                         {['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].map((day) => (
                           <option key={day} value={day}>{day.charAt(0).toUpperCase() + day.slice(1)}</option>
@@ -308,7 +308,7 @@ export default function Settings() {
                       type="time"
                       value={schedule.time}
                       onChange={(e) => setSchedule({ ...schedule, time: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                      className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-black"
                     />
                   </div>
                 </div>
