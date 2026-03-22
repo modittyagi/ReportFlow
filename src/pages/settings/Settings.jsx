@@ -200,7 +200,15 @@ export default function Settings() {
         
         <div className="flex gap-2 mb-6 bg-white p-1.5 rounded-xl border border-gray-200 overflow-x-auto">
           <TabButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={Building2} label="Profile" />
-          <TabButton active={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} icon={CalendarClock} label="Schedule" />
+          <button
+            onClick={() => toast.info('Schedule Reports coming soon!')}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-gray-400 cursor-not-allowed"
+            disabled
+          >
+            <CalendarClock className="w-4 h-4" />
+            Schedule
+            <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-xs rounded">Soon</span>
+          </button>
           <TabButton active={activeTab === 'account'} onClick={() => setActiveTab('account')} icon={User} label="Account" />
         </div>
         
