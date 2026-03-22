@@ -452,10 +452,10 @@ export default function Landing() {
               </div>
               <span className="text-base sm:text-lg font-semibold text-white">ReportFlow</span>
             </div>
-            <div className="flex gap-6 sm:gap-8 text-sm">
-              <a href="#" className="hover:text-white transition">Privacy</a>
-              <a href="#" className="hover:text-white transition">Terms</a>
-              <a href="#" className="hover:text-white transition">Contact</a>
+            <div className="flex gap-4 sm:gap-8 text-sm flex-wrap justify-center">
+              <Link to="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-white transition">Terms of Service</Link>
+              <Link to="/cookies" className="hover:text-white transition">Cookie Policy</Link>
             </div>
           </div>
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-800 text-center text-xs sm:text-sm">
