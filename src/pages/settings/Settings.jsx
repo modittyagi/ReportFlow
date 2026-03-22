@@ -52,7 +52,7 @@ function TabButton({ active, onClick, icon: Icon, label }) {
       }`}
     >
       <Icon className="w-4 h-4" />
-      {label}
+      <span className="hidden sm:inline">{label}</span>
     </button>
   )
 }
@@ -198,7 +198,7 @@ export default function Settings() {
       <main className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-6">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Settings</h2>
         
-        <div className="flex justify-center gap-2 mb-8 bg-white p-2 rounded-xl border border-gray-200">
+        <div className="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-xl border border-gray-200">
           <TabButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={Building2} label="Profile" />
           <button
             onClick={() => toast.info('Schedule Reports coming soon!')}
@@ -206,7 +206,7 @@ export default function Settings() {
             disabled
           >
             <CalendarClock className="w-4 h-4" />
-            Schedule
+            <span className="hidden sm:inline">Schedule</span>
             <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-xs rounded">Soon</span>
           </button>
           <TabButton active={activeTab === 'account'} onClick={() => setActiveTab('account')} icon={User} label="Account" />
